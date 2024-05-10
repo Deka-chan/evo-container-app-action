@@ -58,8 +58,7 @@ runs:
             build_command="pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }} --publish"
             echo "build_command=${build_command}" >> $GITHUB_OUTPUT
 
-            echo "build_command = ${build_command}"
-            sh -c "${command}"
+            pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }} --publish
             
         else
             echo 'docker-image name is already provided.... '
