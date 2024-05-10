@@ -50,6 +50,7 @@ runs:
         "https://auth.iam.sbercloud.ru/auth/system/openid/token" \
         | jq -r '.access_token')
 
+        image_digest=""
         if [ "${{ inputs.source_path }}" != "" ]; then
             echo 'Install Build Pack CLI'
             (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.33.2/pack-v0.33.2-${{ runner.os }}.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
@@ -68,6 +69,9 @@ runs:
             pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }}
             docker tag $test_img ${{ inputs.registry_uri }}/$test_img
             docker push ${{ inputs.registry_uri }}/$test_img
+            image_digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ inputs.registry_uri }}/$test_img)
+            echo 'image_digest: ' $image_digest
+
         else
             echo 'docker-image name is already provided.... '
         fi
