@@ -105,7 +105,7 @@ runs:
                   "max_instance_count": 1,
               },
               "timeout": "600s",
-              "image": "${image_digest}",
+              "image": "cr.cloud.ru/a360ece4-3fef-4d69-b9f9-8f55a43eeaf4/mibontest-d8ba717@sha256:dae9e2ac4ed7fa3bba2337f24f22da7f309cf22e7972b04a4f9857ed10a6adbe",
               "port": "${{ inputs.port }}",
               "command": "[]",
               "external": true,
