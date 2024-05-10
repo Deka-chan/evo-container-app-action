@@ -33,6 +33,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Log in to Evolution Artifact Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.registry_uri }}
+        username: ${{ inputs.client_id }}
+        password: ${{ inputs.client_secret }}
+        
     - name: Create Evoution Container App
       shell: bash
       run: |
@@ -59,7 +66,7 @@ runs:
             echo "build_command=${build_command}" >> $GITHUB_OUTPUT
 
             pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }}
-            
+            docker push ${{ inputs.registry_uri }}/$test_img
         else
             echo 'docker-image name is already provided.... '
         fi
