@@ -12,7 +12,10 @@ inputs:
     required: true
   image_name: 
     description: "Имя образа в реестре Evolution Artifact Registry. Например: 'aspnetapp@sha256:079d0f3df65893ef8a2bcf65108781d8fa7a2e3dd2f2606159d376a78026c6d0'"
-    required: true
+    required: false
+  source_path:
+    description: "source code path"
+    requried: false
   project_id: 
     description: "ИД проекта в ЛК. Например '06363f30-bde4-41a2-a96f-398bf8bd830e'"
     required: true
@@ -29,14 +32,33 @@ runs:
     - name: Create Evoution Container App
       shell: bash
       run: |
+        echo 'Get Access Token'
         ACCESS_TOKEN=$(curl --data-urlencode "grant_type=client_credentials" \
         --data-urlencode "client_id=$KEYID" \
         --data-urlencode "client_secret=$KEYSECRET" \
         "https://auth.iam.sbercloud.ru/auth/system/openid/token" \
         | jq -r '.access_token')
-        
-        echo 'ACCESS_TOKEN: ' $ACCESS_TOKEN
 
+        if [ "${{ inputs.source_path }}" != "" ]; then
+            echo 'Install Build Pack CLI'
+            (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.33.2/pack-v0.33.2-${{ runner.os }}.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+    
+            echo 'Attempting to enable experimental features for the pack CLI'
+            pack config experimental true
+    
+            default_builder=$"paketobuildpacks/builder-jammy-full" # heroku/builder:22
+            echo 'public_api: ' $default_builder
+            
+            pack build \
+             ${{ inputs.registry_uri }}/${{ inputs.image_name }} \
+              --path ${{ inputs.source_path }}  \
+              --builder $default_builder \
+        else
+            echo 'docker-image name is already provided.... '
+        fi
+        
+        
+            
         echo 'Start creating ECA...'
 
         public_api=$"https://containers.api.cloud.ru/v1beta/containers" # current beta endpoint
