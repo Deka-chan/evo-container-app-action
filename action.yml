@@ -66,6 +66,7 @@ runs:
             echo "build_command=${build_command}" >> $GITHUB_OUTPUT
 
             pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }}
+            docker tag $test_img ${{ inputs.registry_uri }}/$test_img
             docker push ${{ inputs.registry_uri }}/$test_img
         else
             echo 'docker-image name is already provided.... '
