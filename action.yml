@@ -70,11 +70,11 @@ runs:
             docker tag $test_img ${{ inputs.registry_uri }}/$test_img
             docker push ${{ inputs.registry_uri }}/$test_img
             image_digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ inputs.registry_uri }}/$test_img)
-            echo 'image_digest='$image_digest
+            echo "image_digest=${image_digest}">> $GITHUB_ENV
 
         else
             image_digest=${{ inputs.registry_uri }}/${{ inputs.image_name }}
-            echo 'image_digest: ' $image_digest
+            echo "image_digest=${image_digest}">> $GITHUB_ENV
             echo 'docker-image name is already provided.... '
         fi
         
@@ -106,7 +106,7 @@ runs:
                   "max_instance_count": 1,
               },
               "timeout": "600s",
-              "image": "${{ image_digest }}",
+              "image": "${{ env.image_digest }}",
               "port": "${{ inputs.port }}",
               "command": "[]",
               "external": true,
@@ -116,5 +116,5 @@ runs:
         echo 'End creating ECA'
       env:
         KEYID: ${{ inputs.client_id }}
-        KEYSECRET: ${{ inputs.client_secret }} 
+        KEYSECRET: ${{ inputs.client_secret }}
         
