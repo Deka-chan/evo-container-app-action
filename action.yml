@@ -15,7 +15,11 @@ inputs:
     required: false
   source_path:
     description: "source code path"
-    requried: false
+    required: false
+  builder:
+    description: "paketobuildpacks/builder-jammy-full or heroku/builder:22 or msft"
+    required: false
+    default: 'paketobuildpacks/builder-jammy-full'
   project_id: 
     description: "ИД проекта в ЛК. Например '06363f30-bde4-41a2-a96f-398bf8bd830e'"
     required: true
@@ -46,13 +50,12 @@ runs:
             echo 'Attempting to enable experimental features for the pack CLI'
             pack config experimental true
     
-            default_builder=$"paketobuildpacks/builder-jammy-full" # heroku/builder:22
-            echo 'public_api: ' $default_builder
-            
-            pack build \
-             ${{ inputs.registry_uri }}/${{ inputs.image_name }} \
-              --path ${{ inputs.source_path }}  \
-              --builder $default_builder \
+            echo 'default_builder: ' ${{ inputs.builder }}
+
+            test_img=${{ inputs.registry_uri }}/${{ inputs.image_name }}
+            echo 'test_img: ' $test_img
+
+            pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }} \
         else
             echo 'docker-image name is already provided.... '
         fi
