@@ -52,10 +52,10 @@ runs:
     
             echo 'default_builder: ' ${{ inputs.builder }}
 
-            test_img=${{ inputs.registry_uri }}/${{ inputs.image_name }}
+            test_img=${{ inputs.registry_uri }}/test
             echo 'test_img: ' $test_img
 
-            pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }} \
+            pack build "$test_img" --path ${{ inputs.source_path }} --builder ${{ inputs.builder }} \
         else
             echo 'docker-image name is already provided.... '
         fi
