@@ -52,7 +52,7 @@ runs:
     
             echo 'default_builder: ' ${{ inputs.builder }}
 
-            test_img="test"
+            test_img="${{ inputs.name }}"
             echo 'test_img: ' $test_img
 
             pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }}
