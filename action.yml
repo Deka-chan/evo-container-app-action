@@ -50,7 +50,7 @@ runs:
         "https://auth.iam.sbercloud.ru/auth/system/openid/token" \
         | jq -r '.access_token')
 
-        image_digest=""
+        IMAGE_DIGEST=""
         if [ "${{ inputs.source_path }}" != "" ]; then
             echo 'Install Build Pack CLI'
             (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.33.2/pack-v0.33.2-${{ runner.os }}.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
@@ -69,17 +69,17 @@ runs:
             pack build $test_img --path ${{ inputs.source_path }} --builder ${{ inputs.builder }}
             docker tag $test_img ${{ inputs.registry_uri }}/$test_img
             docker push ${{ inputs.registry_uri }}/$test_img
-            image_digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ inputs.registry_uri }}/$test_img)
-            echo "image_digest=${image_digest}"
+            IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ inputs.registry_uri }}/$test_img)
+            echo "image_digest=${IMAGE_DIGEST}"
 
         else
-            image_digest=${{ inputs.registry_uri }}/${{ inputs.image_name }}
+            IMAGE_DIGEST=${{ inputs.registry_uri }}/${{ inputs.image_name }}
             echo 'docker-image name is already provided.... '
         fi
         
         
             
-        echo 'Start creating ECA... ' $image_digest 
+        echo 'Start creating ECA... ' $IMAGE_DIGEST 
 
         public_api=$"https://containers.api.cloud.ru/v1beta/containers" # current beta endpoint
         echo 'public_api: ' $public_api
@@ -105,14 +105,14 @@ runs:
                   "max_instance_count": 1,
               },
               "timeout": "600s",
-              "image": "$image_digest",
+              "image": "$IMAGE_DIGEST",
               "port": "${{ inputs.port }}",
               "command": "[]",
               "external": true,
               "command_args": "[]",
               "protocol": "http_1"
           }'
-        echo 'End creating ECA'
+        echo 'End creating ECA with $IMAGE_DIGEST'
       env:
         KEYID: ${{ inputs.client_id }}
         KEYSECRET: ${{ inputs.client_secret }}
