@@ -105,7 +105,7 @@ runs:
                   "max_instance_count": 1,
               },
               "timeout": "600s",
-              "image": "$IMAGE_DIGEST",
+              "image": '"'$IMAGE_DIGEST'"',
               "port": "${{ inputs.port }}",
               "command": "[]",
               "external": true,
