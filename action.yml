@@ -19,7 +19,7 @@ inputs:
   name:
     description: "Уникальное имя Evoution Container App. Например 'evolution-20240229'"
     required: false
-    default: 'evolution-container-app-${{ github.run_id }}-${{ github.run_attempt }}'
+    default: 'evolution-container-app-${{ github.run_id }}-ra${{ github.run_attempt }}'
   port:
     description: "target port > 1000"
     required: true
