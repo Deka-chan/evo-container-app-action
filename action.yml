@@ -79,7 +79,7 @@ runs:
         
         
             
-        echo 'Start creating ECA... ${image_digest}' 
+        echo 'Start creating ECA... $image_digest}' 
 
         public_api=$"https://containers.api.cloud.ru/v1beta/containers" # current beta endpoint
         echo 'public_api: ' $public_api
@@ -105,7 +105,7 @@ runs:
                   "max_instance_count": 1,
               },
               "timeout": "600s",
-              "image": "${image_digest}",
+              "image": "$image_digest",
               "port": "${{ inputs.port }}",
               "command": "[]",
               "external": true,
