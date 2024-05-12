@@ -17,7 +17,7 @@ inputs:
     description: "source code path"
     required: false
   builder:
-    description: "paketobuildpacks/builder-jammy-full or heroku/builder:22 or msft"
+    description: "paketobuildpacks/builder-jammy-full;heroku/builder:22;gcr.io/buildpacks/builder or MSFT oryx+"
     required: false
     default: 'paketobuildpacks/builder-jammy-full'
   project_id: 
