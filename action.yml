@@ -114,7 +114,7 @@ runs:
           }'
 
           echo 'update eca' 
-          curl --location --request PATCH $public_api \
+          curl --location --request PATCH $public_api/f1957d0d-5de5-4c91-aae0-b3482b47c9dc \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
         --data-raw '{ 
