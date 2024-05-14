@@ -115,34 +115,38 @@ runs:
           | jq -r '.id')
 
           echo 'update eca' 
-          curl --location --request PATCH $public_api/$container_id \
-        --header 'Content-Type: application/json' \
-        --header "Authorization: Bearer $ACCESS_TOKEN" \
-        --data-raw '{ 
-              "project_id": "${{ inputs.project_id }}",
-              "name": "${{ inputs.name }}",
-              "resources": {
-                  "limits": {
-                      "cpu": "0.1",
-                      "memory": "256Mi"
+          if [ $container_id != "" ]; then
+            curl --location --request PATCH $public_api/$container_id \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer $ACCESS_TOKEN" \
+            --data-raw '{ 
+                  "project_id": "${{ inputs.project_id }}",
+                  "name": "${{ inputs.name }}",
+                  "resources": {
+                      "limits": {
+                          "cpu": "0.1",
+                          "memory": "256Mi"
+                      },
+                      "requests": {
+                          "cpu": "0.1",
+                          "memory": "256Mi"
+                      }
                   },
-                  "requests": {
-                      "cpu": "0.1",
-                      "memory": "256Mi"
-                  }
-              },
-              "scaling": {
-                  "min_instance_count": 0,
-                  "max_instance_count": 5,
-              },
-              "timeout": "600s",
-              "image": '"'$IMAGE_DIGEST'"',
-              "port": 8080,
-              "command": "[]",
-              "command_args": "[]",
-              "protocol": "http_1"
-          }'
-          
+                  "scaling": {
+                      "min_instance_count": 0,
+                      "max_instance_count": 5,
+                  },
+                  "timeout": "600s",
+                  "image": '"'$IMAGE_DIGEST'"',
+                  "port": 8080,
+                  "command": "[]",
+                  "command_args": "[]",
+                  "protocol": "http_1"
+              }'
+          else
+
+            echo 'something went wrong(((('
+          fi
         echo 'End updating ECA with $IMAGE_DIGEST'
       env:
         KEYID: ${{ inputs.client_id }}
