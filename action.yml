@@ -84,7 +84,7 @@ runs:
         public_api=$"https://containers.api.cloud.ru/v1beta/containers" # current beta endpoint
         echo 'public_api: ' $public_api
         
-        curl --location $public_api \
+        container_id=$(curl --location $public_api \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
         --data-raw '{ 
@@ -111,10 +111,11 @@ runs:
               "external": true,
               "command_args": "[]",
               "protocol": "http_1"
-          }'
+          }'\
+          | jq -r '.id')
 
           echo 'update eca' 
-          curl --location --request PATCH $public_api/f1957d0d-5de5-4c91-aae0-b3482b47c9dc \
+          curl --location --request PATCH $public_api/$container_id \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
         --data-raw '{ 
