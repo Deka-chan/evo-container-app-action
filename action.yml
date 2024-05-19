@@ -114,8 +114,9 @@ runs:
           }'\
           | jq -r '.id')
 
-          echo 'update eca' 
+          
           if [ $container_id != "" ]; then
+            echo 'updating eca'
             curl --location --request PATCH $public_api/$container_id \
             --header 'Content-Type: application/json' \
             --header "Authorization: Bearer $ACCESS_TOKEN" \
@@ -134,18 +135,19 @@ runs:
                   },
                   "scaling": {
                       "min_instance_count": 0,
-                      "max_instance_count": 5,
+                      "max_instance_count": 1,
                   },
                   "timeout": "600s",
                   "image": '"'$IMAGE_DIGEST'"',
-                  "port": 8080,
+                  "port": "${{ inputs.port }}",
                   "command": "[]",
+                  "external": true,
                   "command_args": "[]",
                   "protocol": "http_1"
               }'
           else
 
-            echo 'something went wrong(((('
+            echo 'something went wrong(((( or we just created a new container app, no update needed'
           fi
         echo 'End updating ECA with $IMAGE_DIGEST'
       env:
