@@ -115,10 +115,11 @@ runs:
           | jq -r)
 
           echo 'this is output' $container
-          
+          echo 'End creating ECA with $IMAGE_DIGEST'
+
           if [ $container.id != "" ]; then
-            echo 'updating eca'
-            curl --location --request PATCH $public_api/$container_id \
+            echo 'Start updating ECA with $IMAGE_DIGEST'
+            curl --location --request PATCH $public_api/$container.id \
             --header 'Content-Type: application/json' \
             --header "Authorization: Bearer $ACCESS_TOKEN" \
             --data-raw '{ 
@@ -146,9 +147,10 @@ runs:
                   "command_args": "[]",
                   "protocol": "http_1"
               }'
+            echo 'End updating ECA with $IMAGE_DIGEST'
           else
 
-            echo 'something went wrong(((( or we just created a new container app, no update needed'
+            echo 'End updating ECA: something went wrong(((( or we just created a new container app, no update needed'
           fi
         echo 'End updating ECA with $IMAGE_DIGEST'
       env:
