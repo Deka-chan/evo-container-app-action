@@ -134,34 +134,49 @@ runs:
 
           if [ $container.id != "" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
-            curl --location --request PATCH $public_api/$container.id \
+            curl --location --request PATCH $public_api/${{ inputs.name }} \
             --header 'Content-Type: application/json' \
             --header "Authorization: Bearer $ACCESS_TOKEN" \
-            --data-raw '{ 
-                  "project_id": "${{ inputs.project_id }}",
-                  "name": "${{ inputs.name }}",
-                  "resources": {
-                      "limits": {
-                          "cpu": "0.1",
-                          "memory": "256Mi"
-                      },
-                      "requests": {
-                          "cpu": "0.1",
-                          "memory": "256Mi"
+            --data '{ 
+              "projectId": "${{ inputs.project_id }}",
+              "name": "${{ inputs.name }}",
+              "description": "Этот Container App создан через GitVerse Action",
+              "configuration": {
+                  "ingress": {
+                      "publiclyAccessible": true
+                  },
+                  "autoDeployments": {
+                      "enabled": false,
+                      "pattern": "build*"
+                  }
+              },
+              "template": {
+                  "containers": [
+                      {
+                          "name": "main-container",
+                          "image": "helloworld.cr.cloud.ru/react-helloworld:latest",
+                          "resources": {
+                              "cpu": "0.1",
+                              "memory": "256Mi"
+                          },
+                          "containerPort": ${{ inputs.port }}
                       }
-                  },
+                  ],
                   "scaling": {
-                      "min_instance_count": 0,
-                      "max_instance_count": 1,
-                  },
-                  "timeout": "600s",
-                  "image": '"'$IMAGE_DIGEST'"',
-                  "port": "${{ inputs.port }}",
-                  "command": "[]",
-                  "external": true,
-                  "command_args": "[]",
-                  "protocol": "http_1"
-              }'
+                    "minInstanceCount": 0,
+                    "maxInstanceCount": 3,
+                    "rule": {
+                        "type": "concurrency",
+                        "value": {
+                            "soft": 100,
+                            "hard": 0
+                        }
+                    }
+                 },
+                 "timeout": "600s",
+                 "protocol": "http_1"
+              }
+          }'
             echo 'End updating ECA with $IMAGE_DIGEST'
           else
 
