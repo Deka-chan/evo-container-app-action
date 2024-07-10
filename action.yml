@@ -88,7 +88,7 @@ runs:
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
         --data-raw '{ 
-              "project_id": "${{ inputs.project_id }}",
+              "projectId": "${{ inputs.project_id }}",
               "name": "${{ inputs.name }}",
               "description": "Этот Container App создан через GitVerse Action"
               "configuration": {
