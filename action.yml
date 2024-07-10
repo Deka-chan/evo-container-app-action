@@ -87,10 +87,10 @@ runs:
         container=$(curl --location $public_api \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
-        --data-raw '{ 
-              "projectId": "${{ inputs.project_id }}",
-              "name": "${{ inputs.name }}",
-              "description": "Этот Container App создан через GitVerse Action"
+        --data '{ 
+              "projectId": "06363f30-bde4-41a2-a96f-398bf8bd830e",
+              "name": "gitverse-action-test2",
+              "description": "Этот Container App создан через GitVerse Action",
               "configuration": {
                   "ingress": {
                       "publiclyAccessible": true
@@ -103,17 +103,13 @@ runs:
               "template": {
                   "containers": [
                       {
-                          "name": "${{ inputs.name }}",
+                          "name": "main-container",
                           "image": "helloworld.cr.cloud.ru/react-helloworld:latest",
                           "resources": {
                               "cpu": "0.1",
                               "memory": "256Mi"
                           },
-                          "env": [],
-                          "command": [],
-                          "args": [],
-                          "probes": [],
-                          "containerPort": "${{ inputs.port }}"
+                          "containerPort": 8080
                       }
                   ],
                   "scaling": {
