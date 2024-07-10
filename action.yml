@@ -88,8 +88,8 @@ runs:
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
         --data '{ 
-              "projectId": "06363f30-bde4-41a2-a96f-398bf8bd830e",
-              "name": "gitverse-action-test2",
+              "projectId": "${{ inputs.project_id }}",
+              "name": "${{ inputs.name }}",
               "description": "Этот Container App создан через GitVerse Action",
               "configuration": {
                   "ingress": {
