@@ -81,7 +81,7 @@ runs:
             
         echo 'Start creating ECA... ' $IMAGE_DIGEST 
 
-        public_api=$"https://containers.api.cloud.ru/v1beta/containers" # current beta endpoint
+        public_api=$"https://containers.api.cloud.ru/v1/containers" # current beta endpoint
         echo 'public_api: ' $public_api
         
         container=$(curl --location $public_api \
@@ -90,27 +90,46 @@ runs:
         --data-raw '{ 
               "project_id": "${{ inputs.project_id }}",
               "name": "${{ inputs.name }}",
-              "resources": {
-                  "limits": {
-                      "cpu": "0.1",
-                      "memory": "256Mi"
+              "description": "Этот Container App создан через GitVerse Action"
+              "configuration": {
+                  "ingress": {
+                      "publiclyAccessible": true
                   },
-                  "requests": {
-                      "cpu": "0.1",
-                      "memory": "256Mi"
+                  "autoDeployments": {
+                      "enabled": false,
+                      "pattern": "build*"
                   }
               },
-              "scaling": {
-                  "min_instance_count": 0,
-                  "max_instance_count": 1,
-              },
-              "timeout": "600s",
-              "image": '"'$IMAGE_DIGEST'"',
-              "port": "${{ inputs.port }}",
-              "command": "[]",
-              "external": true,
-              "command_args": "[]",
-              "protocol": "http_1"
+              "template": {
+                  "containers": [
+                      {
+                          "name": "${{ inputs.name }}",
+                          "image": "helloworld.cr.cloud.ru/react-helloworld:latest",
+                          "resources": {
+                              "cpu": "0.1",
+                              "memory": "256Mi"
+                          },
+                          "env": [],
+                          "command": [],
+                          "args": [],
+                          "probes": [],
+                          "containerPort": "${{ inputs.port }}"
+                      }
+                  ],
+                  "scaling": {
+                    "minInstanceCount": 0,
+                    "maxInstanceCount": 2,
+                    "rule": {
+                        "type": "concurrency",
+                        "value": {
+                            "soft": 100,
+                            "hard": 0
+                        }
+                    }
+                 },
+                 "timeout": "600s",
+                 "protocol": "http_1"
+              }
           }'\
           | jq -r)
 
