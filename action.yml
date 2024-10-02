@@ -83,7 +83,8 @@ runs:
 
         public_api=$"https://containers.api.cloud.ru/v1/containers" # current beta endpoint
         echo 'public_api: ' $public_api
-        
+        echo 'public_api: ' $IMAGE_DIGEST
+        echo 'name: '"${{ inputs.name }}"
         container=$(curl --location $public_api \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
@@ -103,8 +104,8 @@ runs:
               "template": {
                   "containers": [
                       {
-                          "name": "main-container",
-                          "image": "${{ inputs.registry_uri }}/${{ inputs.image_name }},
+                          "name": "${{ inputs.name }}",
+                          "image": "${{ inputs.registry_uri }}/${{ inputs.image_name }}",
                           "resources": {
                               "cpu": "0.1",
                               "memory": "256Mi"
@@ -153,7 +154,7 @@ runs:
               "template": {
                   "containers": [
                       {
-                          "name": "main-container",
+                          "name": "${{ inputs.name }}",
                           "image": "${{ inputs.registry_uri }}/${{ inputs.image_name }}",
                           "resources": {
                               "cpu": "0.1",
