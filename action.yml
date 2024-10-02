@@ -83,8 +83,6 @@ runs:
 
         public_api=$"https://containers.api.cloud.ru/v1/containers" # current beta endpoint
         echo 'public_api: ' $public_api
-        echo 'public_api: ' $IMAGE_DIGEST
-        echo 'name: '"${{ inputs.name }}"
         container=$(curl --location $public_api \
         --header 'Content-Type: application/json' \
         --header "Authorization: Bearer $ACCESS_TOKEN" \
@@ -133,7 +131,7 @@ runs:
           echo 'this is output' $container
           echo 'End creating ECA with $IMAGE_DIGEST'
 
-          if [ $container.id != "" ]; then
+          if [ $container.code == "1" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
             curl --location --request PATCH $public_api/${{ inputs.name }} \
             --header 'Content-Type: application/json' \
@@ -165,7 +163,7 @@ runs:
                   ],
                   "scaling": {
                     "minInstanceCount": 0,
-                    "maxInstanceCount": 3,
+                    "maxInstanceCount": 2,
                     "rule": {
                         "type": "concurrency",
                         "value": {
