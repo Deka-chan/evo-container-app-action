@@ -79,7 +79,7 @@ runs:
         
         
             
-        echo 'Start creating ECA... ' ${IMAGE_DIGEST}
+        echo 'Start creating ECA... ' ${{ inputs.registry_uri }}/${{ inputs.image_name }}
 
         public_api=$"https://containers.api.cloud.ru/v1/containers" # current beta endpoint
         echo 'public_api: ' $public_api
@@ -104,7 +104,7 @@ runs:
                   "containers": [
                       {
                           "name": "main-container",
-                          "image": "${IMAGE_DIGEST}",
+                          "image": "${{ inputs.registry_uri }}/${{ inputs.image_name }},
                           "resources": {
                               "cpu": "0.1",
                               "memory": "256Mi"
@@ -154,7 +154,7 @@ runs:
                   "containers": [
                       {
                           "name": "main-container",
-                          "image": "${IMAGE_DIGEST}",
+                          "image": "${{ inputs.registry_uri }}/${{ inputs.image_name }}",
                           "resources": {
                               "cpu": "0.1",
                               "memory": "256Mi"
