@@ -130,9 +130,10 @@ runs:
 
           echo 'this is output' $container
           echo 'End creating ECA with '$IMAGE_DIGEST
-          echo 'container.id ' ${container.id}
-          echo 'container.code ' ${container.code}
-          if [ $container.code == 1 ]; then
+          echo 'this is output id ' $container | jq -r .id
+          echo 'this is output code ' $container | jq -r .code
+          code = $container | jq -r .code
+          if [ $code == "1" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
             curl --location --request PATCH $public_api/${{ inputs.name }} \
             --header 'Content-Type: application/json' \
