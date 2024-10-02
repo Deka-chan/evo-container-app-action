@@ -126,13 +126,11 @@ runs:
                  "protocol": "http_1"
               }
           }'\
-          | jq -r)
+          | jq -r '.code')
 
           echo 'this is output' $container
           echo 'End creating ECA with '$IMAGE_DIGEST
-          code = $(jq '.code' <( echo "$container"))
-          echo 'this is output code ' $code 
-          if [ $code == "1" ]; then
+          if [ $container == "1" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
             curl --location --request PATCH $public_api/${{ inputs.name }} \
             --header 'Content-Type: application/json' \
