@@ -112,7 +112,7 @@ runs:
                       }
                   ],
                   "scaling": {
-                    "minInstanceCount": 0,
+                    "minInstanceCount": 1,
                     "maxInstanceCount": 2,
                     "rule": {
                         "type": "concurrency",
@@ -161,7 +161,7 @@ runs:
                       }
                   ],
                   "scaling": {
-                    "minInstanceCount": 0,
+                    "minInstanceCount": 1,
                     "maxInstanceCount": 2,
                     "rule": {
                         "type": "concurrency",
