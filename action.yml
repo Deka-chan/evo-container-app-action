@@ -130,8 +130,7 @@ runs:
 
           echo 'this is output' $container
           echo 'End creating ECA with '$IMAGE_DIGEST
-
-          code = $(jq -n --argjson data "$container" '$data.code')
+          code = $(jq -r '.code' <<< "${container}")
           echo 'this is output code ' $code 
           if [ $code == "1" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
