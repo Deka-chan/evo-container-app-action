@@ -130,8 +130,8 @@ runs:
 
           echo 'this is output' $container
           echo 'End creating ECA with '$IMAGE_DIGEST
-          echo 'container.id ' $container.id
-          echo 'container.code ' $container.code
+          echo 'container.id ' ${{container.id}}
+          echo 'container.code ' ${{container.code}}
           if [ $container.code == 1 ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
             curl --location --request PATCH $public_api/${{ inputs.name }} \
