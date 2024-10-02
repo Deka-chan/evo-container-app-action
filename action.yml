@@ -130,7 +130,7 @@ runs:
 
           echo 'this is output' $container
           echo 'End creating ECA with '$IMAGE_DIGEST
-          code = $(jq '.code' "$container")
+          code = $(jq '.code' <<< "$container")
           echo 'this is output code ' $code 
           if [ $code == "1" ]; then
             echo 'Start updating ECA with $IMAGE_DIGEST'
